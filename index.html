@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuidar Conecta - Aplicativo de Apoio à Dependência Química</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F0F9FF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --primary: #1E3A8A;
+            --primary-light: #DBEAFE;
+            --primary-medium: #3B82F6;
+            --secondary: #0D9488;
+            --secondary-light: #CCFBF1;
+            --secondary-medium: #14B8A6;
+            --border: #E2E8F0;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        header {
+            padding: 1.25rem 0;
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            box-shadow: var(--shadow-md);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+            font-family: 'Fredoka', sans-serif;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        nav a:hover::after,
+        nav a.active::after {
+            width: 100%;
+        }
+
+        nav a.active {
+            color: var(--primary);
+        }
+
+        .hero {
+            padding: 10rem 0 8rem;
+            min-height: 95vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-tertiary) 50%, var(--secondary-light) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
+            opacity: 0.3;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--secondary-light) 0%, transparent 70%);
+            opacity: 0.3;
+            animation: float 10s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-30px) rotate(5deg);
+            }
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: clamp(3.5rem, 12vw, 6rem);
+            font-weight: 600;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+            color: var(--text-primary);
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero h1 span::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background: var(--secondary-light);
+            z-index: -1;
+            border-radius: 8px;
+            animation: expandWidth 1s ease-out 0.3s both;
+        }
+
+        @keyframes expandWidth {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            line-height: 1.8;
+            animation: slideUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            animation: slideUp 0.8s ease-out 0.4s both;
+        }
+
+        .meta-item {
+            padding: 1.25rem 1.75rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .meta-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .meta-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .meta-value {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .section {
+            padding: 8rem 0;
+            position: relative;
+        }
+
+        .section-header {
+            margin-bottom: 5rem;
+            text-align: center;
+        }
+
+        .section-number {
+            font-size: 0.875rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 600;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .intro-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 3.5rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
+            max-width: 800px;
+            margin: 0 auto;
+            transition: all 0.4s ease;
+        }
+
+        .intro-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .intro-card p {
+            font-size: 1.125rem;
+            line-height: 1.9;
+            color: var(--text-primary);
+        }
+
+        .problem-solution-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .tab-button {
+            padding: 1.75rem 2.25rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-medium) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .tab-button:hover {
+            border-color: var(--primary);
+            transform: translateX(8px);
+        }
+
+        .tab-button.active {
+            border-color: var(--primary);
+            transform: translateX(12px);
+        }
+
+        .tab-button.active::before {
+            opacity: 1;
+        }
+
+        .tab-button > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-button.active h3,
+        .tab-button.active .tab-number {
+            color: white;
+        }
+
+        .tab-number {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
+            flex-shrink: 0;
+            transition: all 0.4s ease;
+        }
+
+        .tab-button.active .tab-number {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .tab-button h3 {
+            font-size: 1.375rem;
+            font-weight: 600;
+            transition: color 0.4s ease;
+        }
+
+        .tab-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-top: 1rem;
+            display: none;
+            animation: expandDown 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-content p {
+            font-size: 1.125rem;
+            line-height: 1.9;
+            color: var(--text-secondary);
+        }
+
+        @keyframes expandDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .stepper-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .stepper-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4rem;
+            position: relative;
+            padding: 1rem 0;
+        }
+
+        .stepper-nav::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--border);
+            transform: translateY(-50%);
+            z-index: 0;
+            border-radius: 2px;
+        }
+
+        .stepper-progress {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            transform: translateY(-50%);
+            z-index: 1;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 2px;
+        }
+
+        .stepper-step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .step-number {
+            width: 56px;
+            height: 56px;
+            background: var(--bg-secondary);
+            border: 3px solid var(--border);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.375rem;
+            margin: 0 auto 1rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .stepper-step:hover .step-number {
+            transform: scale(1.1);
+            border-color: var(--primary);
+        }
+
+        .stepper-step.active .step-number {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-medium) 100%);
+            border-color: var(--primary);
+            color: white;
+            transform: scale(1.15);
+            box-shadow: 0 8px 20px rgba(30, 58, 138, 0.3);
+        }
+
+        .stepper-step.completed .step-number {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-medium) 100%);
+            border-color: var(--secondary);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .stepper-step.active .step-label {
+            color: var(--primary);
+        }
+
+        .stepper-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 4rem;
+            min-height: 250px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stepper-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .step-panel {
+            display: none;
+            animation: slideInRight 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .step-panel.active {
+            display: block;
+        }
+
+        .step-panel h3 {
+            font-size: 2rem;
+            margin-bottom: 1.25rem;
+            color: var(--primary);
+        }
+
+        .step-panel p {
+            font-size: 1.25rem;
+            line-height: 1.9;
+            color: var(--text-secondary);
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--secondary) 0%, var(--secondary-medium) 100%);
+            transform: scaleX(0);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--secondary);
+        }
+
+        .feature-card:hover::before,
+        .feature-card.active::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card.active {
+            border-color: var(--secondary);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .feature-number {
+            font-size: 0.8rem;
+            color: var(--secondary);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .feature-card h4 {
+            font-size: 1.375rem;
+            margin-bottom: 0.875rem;
+            color: var(--text-primary);
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .feature-detail {
+            margin-top: 1.75rem;
+            padding-top: 1.75rem;
+            border-top: 1px solid var(--border);
+            display: none;
+        }
+
+        .feature-card.active .feature-detail {
+            display: block;
+            animation: expandContent 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .feature-detail p {
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        @keyframes expandContent {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 300px;
+            }
+        }
+
+        .results-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .result-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-medium) 100%);
+            transform: scaleX(0);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .result-card:hover,
+        .result-card.active {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-4px);
+        }
+
+        .result-card:hover::before,
+        .result-card.active::before {
+            transform: scaleX(1);
+        }
+
+        .result-card h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .result-detail-panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 4rem;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-detail-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .result-detail-panel h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .result-detail-panel p {
+            font-size: 1.25rem;
+            line-height: 1.9;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+        }
+
+        .acolhimento-box {
+            background: linear-gradient(135deg, var(--secondary-light) 0%, var(--primary-light) 100%);
+            border: 2px solid var(--secondary);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .acolhimento-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+        }
+
+        .acolhimento-box h4 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .acolhimento-box p {
+            color: var(--text-primary);
+            font-size: 1.125rem;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        footer {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-top: 1px solid var(--border);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 50%, var(--primary) 100%);
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-highlight {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 6rem 0 4rem;
+                min-height: auto;
+            }
+
+            .hero h1 {
+                font-size: 2.75rem;
+            }
+
+            .hero-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stepper-nav {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 2rem 0;
+            }
+
+            .stepper-nav::before,
+            .stepper-progress {
+                display: none;
+            }
+
+            .stepper-step {
+                display: flex;
+                align-items: center;
+                gap: 1.25rem;
+                text-align: left;
+            }
+
+            .step-number {
+                margin: 0;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .header-content {
+                justify-content: center;
+            }
+
+            .tab-button {
+                padding: 1.25rem 1.75rem;
+            }
+
+            .stepper-content {
+                padding: 2.5rem;
+            }
+
+            .result-detail-panel {
+                padding: 2.5rem;
+            }
+        }
+
+        .animate-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .magnetic-btn {
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo magnetic-btn">Cuidar<span>Conecta</span></div>
+            <nav>
+                <a href="#intro" class="active">Introdução</a>
+                <a href="#problem">Problema</a>
+                <a href="#how">Como Funciona</a>
+                <a href="#features">Funções</a>
+                <a href="#results">Resultados</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Cuidar<br><span>Conecta</span></h1>
+                <p class="hero-subtitle">Aplicativo de apoio e orientação para dependência química, conectando pessoas aos serviços de saúde com acolhimento e empatia.</p>
+                <div class="hero-meta">
+                    <div class="meta-item">
+                        <div class="meta-label">Alunos</div>
+                        <div class="meta-value">Jonas e Gilson</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Escola</div>
+                        <div class="meta-value">Nova Cultural</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Professor</div>
+                        <div class="meta-value">Ives</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="intro">
+        <div class="container">
+            <div class="section-header animate-in">
+                <div class="section-number">01</div>
+                <h2 class="section-title">Introdução</h2>
+                <p class="section-subtitle">Conheça o propósito e a visão do nosso projeto</p>
+            </div>
+            <div class="intro-card animate-in">
+                <p>Nosso projeto se chama Cuidar Conecta. A ideia é desenvolver um aplicativo para ajudar pessoas que enfrentam problemas relacionados à dependência química, oferecendo informações, orientação e acesso a serviços de apoio.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="problem">
+        <div class="container">
+            <div class="section-header animate-in">
+                <div class="section-number">02</div>
+                <h2 class="section-title">Problema e Solução</h2>
+                <p class="section-subtitle">Entendemos as dificuldades e criamos uma resposta</p>
+            </div>
+            <div class="problem-solution-container animate-in">
+                <div class="tab-button active" onclick="showTab(0)">
+                    <div class="tab-number">1</div>
+                    <h3>O Problema</h3>
+                </div>
+                <div class="tab-content active" id="tab-0">
+                    <p>Muitas pessoas enfrentam dificuldades para encontrar ajuda, além de sofrerem com o preconceito e a falta de informação sobre onde buscar suporte para dependência química.</p>
+                </div>
+                <div class="tab-button" onclick="showTab(1)">
+                    <div class="tab-number">2</div>
+                    <h3>A Solução</h3>
+                </div>
+                <div class="tab-content" id="tab-1">
+                    <p>Pensamos em um aplicativo que facilite o acesso a informações confiáveis e ajude essas pessoas a encontrar serviços de atendimento de forma rápida, segura e acolhedora.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="how">
+        <div class="container">
+            <div class="section-header animate-in">
+                <div class="section-number">03</div>
+                <h2 class="section-title">Como Funcionará</h2>
+                <p class="section-subtitle">Um processo simples em três etapas</p>
+            </div>
+            <div class="stepper-container animate-in">
+                <div class="stepper-nav">
+                    <div class="stepper-progress" id="stepperProgress"></div>
+                    <div class="stepper-step active" onclick="goToStep(0)">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Acessar</div>
+                    </div>
+                    <div class="stepper-step" onclick="goToStep(1)">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Consultar</div>
+                    </div>
+                    <div class="stepper-step" onclick="goToStep(2)">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Encontrar</div>
+                    </div>
+                </div>
+                <div class="stepper-content">
+                    <div class="step-panel active" id="step-0">
+                        <h3>Acessar o Aplicativo</h3>
+                        <p>Primeiro, a pessoa acessaria o aplicativo de forma fácil e intuitiva, sem barreiras técnicas ou burocráticas, em um ambiente seguro e acolhedor.</p>
+                    </div>
+                    <div class="step-panel" id="step-1">
+                        <h3>Consultar Informações</h3>
+                        <p>Depois, poderia consultar informações confiáveis e procurar opções de atendimento de acordo com suas necessidades específicas, com total privacidade.</p>
+                    </div>
+                    <div class="step-panel" id="step-2">
+                        <h3>Encontrar Serviços de Saúde</h3>
+                        <p>Por fim, encontraria serviços de saúde e apoio, como os CAPS e as UBS, para saber exatamente onde buscar ajuda profissional especializada.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="features">
+        <div class="container">
+            <div class="section-header animate-in">
+                <div class="section-number">04</div>
+                <h2 class="section-title">Principais Funções</h2>
+                <p class="section-subtitle">Quatro recursos essenciais para facilitar a busca por apoio</p>
+            </div>
+            <div class="features-grid animate-in">
+                <div class="feature-card" onclick="toggleFeature(this)">
+                    <div class="feature-number">01</div>
+                    <h4>Fornecer Informações Confiáveis</h4>
+                    <p>Acesso a conteúdo verificado sobre dependência química.</p>
+                    <div class="feature-detail">
+                        <p>O aplicativo oferecerá informações baseadas em fontes confiáveis, com conteúdo educativo sobre dependência química, tratamento e recuperação, sempre atualizado e acessível.</p>
+                    </div>
+                </div>
+                <div class="feature-card" onclick="toggleFeature(this)">
+                    <div class="feature-number">02</div>
+                    <h4>Localizar Serviços de Saúde</h4>
+                    <p>Encontre CAPS, UBS e outros pontos de atendimento.</p>
+                    <div class="feature-detail">
+                        <p>Sistema de geolocalização para encontrar os serviços de saúde mais próximos, como CAPS (Centros de Atenção Psicossocial) e UBS (Unidades Básicas de Saúde), com informações de horários e contatos.</p>
+                    </div>
+                </div>
+                <div class="feature-card" onclick="toggleFeature(this)">
+                    <div class="feature-number">03</div>
+                    <h4>Lembretes Opcionais</h4>
+                    <p>Notificações para compromissos e medicamentos.</p>
+                    <div class="feature-detail">
+                        <p>Funcionalidade opcional que permite configurar lembretes para consultas, sessões de terapia e horários de medicamentos, ajudando na organização e adesão ao tratamento.</p>
+                    </div>
+                </div>
+                <div class="feature-card" onclick="toggleFeature(this)">
+                    <div class="feature-number">04</div>
+                    <h4>Proteger a Privacidade</h4>
+                    <p>Seus dados estarão sempre seguros e confidenciais.</p>
+                    <div class="feature-detail">
+                        <p>O aplicativo prioriza a privacidade dos usuários, garantindo que todas as informações pessoais sejam protegidas e que o uso seja totalmente confidencial e seguro.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="results">
+        <div class="container">
+            <div class="section-header animate-in">
+                <div class="section-number">05</div>
+                <h2 class="section-title">Resultados Esperados</h2>
+                <p class="section-subtitle">O impacto que queremos gerar na sociedade</p>
+            </div>
+            <div class="results-container animate-in">
+                <div class="results-grid">
+                    <div class="result-card active" onclick="showResult(0)">
+                        <h4>Facilitar o Acesso</h4>
+                    </div>
+                    <div class="result-card" onclick="showResult(1)">
+                        <h4>Combater o Preconceito</h4>
+                    </div>
+                    <div class="result-card" onclick="showResult(2)">
+                        <h4>Aproximar Serviços</h4>
+                    </div>
+                </div>
+                <div class="result-detail-panel" id="resultDetail">
+                    <h3>Facilitar o Acesso à Ajuda</h3>
+                    <p>Com esse projeto, esperamos facilitar o acesso à ajuda para pessoas que enfrentam dependência química, removendo barreiras e dificuldades na busca por suporte profissional.</p>
+                    <div class="acolhimento-box">
+                        <h4>Mensagem de Acolhimento</h4>
+                        <p>É importante lembrar que o aplicativo não substituiria profissionais, mas funcionaria como uma ferramenta de orientação e acolhimento. Afinal, pedir ajuda é um passo importante e corajoso.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-highlight">Pedir ajuda é um passo importante</p>
+                <p class="footer-text">Cuidar Conecta © 2026 - Projeto desenvolvido por Jonas e Gilson</p>
+                <p class="footer-text">Escola Nova Cultural - Professor Ives</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const results = [
+            {
+                title: 'Facilitar o Acesso à Ajuda',
+                text: 'Com esse projeto, esperamos facilitar o acesso à ajuda para pessoas que enfrentam dependência química, removendo barreiras e dificuldades na busca por suporte profissional.'
+            },
+            {
+                title: 'Combater o Preconceito',
+                text: 'Através de informação e educação, buscamos combater o estigma e o preconceito associados à dependência química, promovendo uma visão mais compassiva e acolhedora na sociedade.'
+            },
+            {
+                title: 'Aproximar dos Serviços de Saúde',
+                text: 'Queremos conectar as pessoas aos serviços de saúde disponíveis, como CAPS e UBS, facilitando o caminho até o tratamento profissional e o suporte necessário para recuperação.'
+            }
+        ];
+
+        function showTab(index) {
+            const buttons = document.querySelectorAll('.tab-button');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            buttons.forEach((button, i) => {
+                if (i === index) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+
+            contents.forEach((content, i) => {
+                if (i === index) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+
+        let currentStep = 0;
+
+        function goToStep(index) {
+            const steps = document.querySelectorAll('.stepper-step');
+            const panels = document.querySelectorAll('.step-panel');
+            const progress = document.getElementById('stepperProgress');
+            
+            currentStep = index;
+            
+            steps.forEach((step, i) => {
+                step.classList.remove('active', 'completed');
+                if (i < index) {
+                    step.classList.add('completed');
+                } else if (i === index) {
+                    step.classList.add('active');
+                }
+            });
+
+            panels.forEach((panel, i) => {
+                if (i === index) {
+                    panel.classList.add('active');
+                } else {
+                    panel.classList.remove('active');
+                }
+            });
+
+            const progressWidth = (index / (steps.length - 1)) * 100;
+            progress.style.width = progressWidth + '%';
+        }
+
+        function toggleFeature(element) {
+            element.classList.toggle('active');
+        }
+
+        function showResult(index) {
+            const cards = document.querySelectorAll('.result-card');
+            const detail = document.getElementById('resultDetail');
+            
+            cards.forEach((card, i) => {
+                if (i === index) {
+                    card.classList.add('active');
+                } else {
+                    card.classList.remove('active');
+                }
+            });
+
+            detail.innerHTML = `
+                <h3>${results[index].title}</h3>
+                <p>${results[index].text}</p>
+                <div class="acolhimento-box">
+                    <h4>Mensagem de Acolhimento</h4>
+                    <p>É importante lembrar que o aplicativo não substituiria profissionais, mas funcionaria como uma ferramenta de orientação e acolhimento. Afinal, pedir ajuda é um passo importante e corajoso.</p>
+                </div>
+            `;
+        }
+
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('nav a');
+        const header = document.querySelector('header');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 300) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        showResult(0);
+
+        document.querySelectorAll('.magnetic-btn').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0, 0)';
+            });
+        });
+    </script>
+</body>
+</html>
